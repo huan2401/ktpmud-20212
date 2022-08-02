@@ -6,12 +6,13 @@ import { checkLogin } from "slices/authSlice";
 import AuthLayout from "components/Layout/AuthLayout/AuthLayout";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "containers/Home/Home";
-import Setting from "containers/Setting/Setting";
 import Login from "containers/Login/Login";
 import Signup from "containers/Signup/Signup";
 import NotFound from "containers/NotFound/NotFound";
-import Board from "containers/Board/Board";
 import Test from "containers/Test/Test";
+import Header from "components/Layout/Header";
+import News from "containers/News/News";
+import NewDetail from "containers/NewDetail/NewDetail";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,46 +24,42 @@ function App() {
     }
   }, [isLogin]);
   return (
-    <Routes>
-      <Route path="login" element={<Login />} />
-      <Route path="signup" element={<Signup />} />
+    <>
+      <Header />
+      <Routes>
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="news" element={<News />} />
+        <Route path="newdetail" element={<NewDetail />}>
+          <Route path=":id" element={<News />} />
+        </Route>
+        <Route path="test" element={<Test />} />
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
+    // <Routes>
+    //   <Route path="login" element={<Login />} />
+    //   <Route path="signup" element={<Signup />} />
 
-      <Route
-        path="board"
-        element={
-          <AuthLayout isAllowed={isLogin}>
-            <Board />
-          </AuthLayout>
-        }
-      >
-        <Route path=":id" element={<Board />} />
-      </Route>
-      <Route
-        path="test"
-        element={
-          <AuthLayout isAllowed={isLogin}>
-            <Test />
-          </AuthLayout>
-        }
-      />
-      <Route
-        path="setting"
-        element={
-          <AuthLayout isAllowed={isLogin}>
-            <Setting />
-          </AuthLayout>
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <AuthLayout isAllowed={isLogin}>
-            <Home />
-          </AuthLayout>
-        }
-      />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    //   <Route
+    //     path="test"
+    //     element={
+    //       <AuthLayout isAllowed={isLogin}>
+    //         <Test />
+    //       </AuthLayout>
+    //     }
+    //   />
+    //   <Route
+    //     path="/"
+    //     element={
+    //       <AuthLayout isAllowed={isLogin}>
+    //         <Home />
+    //       </AuthLayout>
+    //     }
+    //   />
+    //   <Route path="*" element={<NotFound />} />
+    // </Routes>
   );
 }
 

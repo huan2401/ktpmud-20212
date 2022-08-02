@@ -1,19 +1,32 @@
 import axiosClient from "utils/axiosClient";
 
-const register = (userName, password, email, firstName, lastName, sex) => {
-  return axiosClient.post("/user/signup", {
-    userName,
-    password,
+const register = (
+  username,
+  firstname,
+  lastname,
+  email,
+  gender,
+  avatar,
+  phone,
+  password,
+  roles
+) => {
+  return axiosClient.post("/auth/signup", {
+    username,
+    firstname,
+    lastname,
     email,
-    firstName,
-    lastName,
-    sex
+    gender,
+    avatar,
+    phone,
+    password,
+    roles,
   });
 };
 
-const login = (userName, password) => {
-  return axiosClient.post("/auth/login", {
-    userName,
+const login = (username, password) => {
+  return axiosClient.post("/auth/signin", {
+    username,
     password,
   });
 };

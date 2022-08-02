@@ -4,6 +4,20 @@ const dbConfig = require("./app/config/db.config");
 
 const app = express();
 
+// middleware that does not modify the response body
+var doesNotModifyBody = function (request, response, next) {
+  next();
+};
+
+// middleware that modify the response body
+var doesModifyBody = function (request, response, next) {
+  response.setHeader("Content-Type", "application/json");
+  next();
+};
+
+app.use(doesNotModifyBody);
+app.use(doesModifyBody);
+
 // let corsOptions = {
 //   origin: "http://localhost:8081",
 // };

@@ -44,5 +44,17 @@ exports.createNews = async (req, res) => {
       news.address[`${key}`] = address[`${key}`];
     }
     console.log("news", news);
+    await news.save((err) => {
+      if (err) {
+        res.json({
+          message: "Lỗi không thể đăng tin!! Vui lòng kiểm tra lại",
+          result: false,
+        });
+      }
+      res.json({
+        message: "Đăng tin thành công",
+        result: true,
+      });
+    });
   } catch (error) {}
 };

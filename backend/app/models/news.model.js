@@ -50,8 +50,9 @@ const News = mongoose.model(
       default: Date.now(),
     },
     datetime_finish: {
-      type: String,
-      required: true,
+      type: Date,
+      // required: true,
+      default: Date.now(),
     },
     utilities: {
       isChecked_wifi: {

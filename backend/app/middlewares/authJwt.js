@@ -8,19 +8,20 @@ const { TokenExpiredError } = jwt;
 
 const catchError = (err, res) => {
   if (err instanceof TokenExpiredError) {
-    return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+    return res
+      .status(401)
+      .send({ message: "Unauthorized! Access Token was expired!" });
   }
 
   return res.sendStatus(401).send({ message: "Unauthorized!" });
-}
+};
 
 const verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
-
+  // let token = req.headers["x-access-token"];
+  let token = req.headers.authorization.split(" ")[1];
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }
-
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
       return catchError(err, res);
@@ -39,7 +40,7 @@ const isRenter = (req, res, next) => {
 
     Role.find(
       {
-        _id: { $in: user.roles }
+        _id: { $in: user.roles },
       },
       (err, roles) => {
         if (err) {
@@ -70,7 +71,7 @@ const isUser = (req, res, next) => {
 
     Role.find(
       {
-        _id: { $in: user.roles }
+        _id: { $in: user.roles },
       },
       (err, roles) => {
         if (err) {
@@ -95,6 +96,6 @@ const isUser = (req, res, next) => {
 const authJwt = {
   verifyToken,
   isRenter,
-  isUser
+  isUser,
 };
 module.exports = authJwt;

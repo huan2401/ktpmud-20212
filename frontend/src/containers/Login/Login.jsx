@@ -1,121 +1,93 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { checkLogin, login } from "slices/authSlice";
-import { Navigate } from "react-router-dom";
-import "./Login.scss";
+import {
+  Button,
+  Form,
+  Input,
+  Radio,
+  Upload,
+  message,
+  Checkbox,
+  Col,
+  Row,
+} from "antd";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { LoginWrapper } from "./CustomStyle";
+import { login } from "slices/authSlice";
 
 function Login() {
-  const initialValues = { username: "", password: "" };
-  const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
 
   const isLogin = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   useEffect(() => {
-    // if (localStorage.getItem("token")) {
-    //   dispatch(checkLogin(true));
-    // }
     if (isLogin) {
       navigate("/", { replace: true });
     }
   }, [isLogin]);
-  console.log("isLogin", isLogin);
-  console.log("formValues", formValues);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+  const onFinish = (values) => {
+    console.log("Success:", values);
+    dispatch(login(values));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormErrors(validate(formValues));
-    setIsSubmit(true);
-    dispatch(login(formValues));
-  };
-
-  useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-    }
-  }, [formErrors]);
-  const validate = (values) => {
-    const errors = {};
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    if (!values.username) {
-      errors.username = "Username is required!";
-    }
-    // if (!values.email) {
-    //     errors.email = "Email is required!";
-    // } else if (!regex.test(values.email)) {
-    //     errors.email = "This is not a valid email format!";
-    // }
-    if (!values.password) {
-      errors.password = "Password is required";
-    } else if (values.password.length < 4) {
-      errors.password = "Password must be more than 4 characters";
-    } else if (values.password.length > 10) {
-      errors.password = "Password cannot exceed more than 10 characters";
-    }
-    return errors;
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
   };
 
   return (
-    <div className="login">
-      <div className="color"></div>
-      <div className="color"></div>
-      <div className="color"></div>
-      <form onSubmit={handleSubmit} className="box">
-        <div className="square" style={{ "--i": 0 }}></div>
-        <div className="square" style={{ "--i": 1 }}></div>
-        <div className="square" style={{ "--i": 2 }}></div>
-        <div className="square" style={{ "--i": 3 }}></div>
-        <div className="square" style={{ "--i": 4 }}></div>
+    <LoginWrapper>
+      <Form
+        name="basic"
+        labelCol={{
+          span: 8,
+        }}
+        wrapperCol={{
+          span: 16,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-        <div className="container">
-          <div className="form">
-            <h2>Login</h2>
-            <div>
-              <div className="inputBox">
-                <label>Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="Username"
-                  value={formValues.username}
-                  onChange={handleChange}
-                />
-              </div>
-              <p className="message">{formErrors.username}</p>
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
 
-              <div className="inputBox">
-                <label>Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={formValues.password}
-                  onChange={handleChange}
-                />
-              </div>
-              <p className="message">{formErrors.password}</p>
-              <div className="inputBox">
-                <input type="submit" value="Login" />
-              </div>
-              <p className="forget">
-                Forgot Password ?<a href="#">Click Here</a>
-              </p>
-              <p className="forget">
-                Don't have an account ?<Link to="/signup">Sign up</Link>
-              </p>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+    </LoginWrapper>
   );
 }
 

@@ -5,15 +5,31 @@ const user = JSON.parse(localStorage.getItem("user"));
 
 export const register = createAsyncThunk(
   "auth/register",
-  async ({ userName, password, email, firstName, lastName, sex }, thunkAPI) => {
+  async (
+    {
+      username,
+      firstname,
+      lastname,
+      email,
+      gender,
+      avatar,
+      phone,
+      password,
+      roles,
+    },
+    thunkAPI
+  ) => {
     try {
       const response = await AuthService.register(
-        userName,
-        password,
+        username,
+        firstname,
+        lastname,
         email,
-        firstName,
-        lastName,
-        sex
+        gender,
+        avatar,
+        phone,
+        password,
+        roles
       );
       console.log("sign up data res", response);
       return response.data;
@@ -72,6 +88,7 @@ const authSlice = createSlice({
       localStorage.removeItem("login");
       return {
         ...state,
+        user: null,
         login: false,
       };
     },
@@ -85,7 +102,7 @@ const authSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       state.login = true;
-      state.user = action.payload.user;
+      state.user = action.payload.user.data;
     },
     [login.rejected]: (state, action) => {
       state.login = false;

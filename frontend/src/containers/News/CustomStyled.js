@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-export const BoardWrapper = styled.div`
-
+export const NewsWrapper = styled.div`
 
 `

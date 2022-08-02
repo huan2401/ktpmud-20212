@@ -120,6 +120,70 @@ exports.signin = (req, res) => {
     });
 };
 
+exports.forgotPassword = (req, res) => {
+  User.findOne({ username: req.body.username }).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    if (!user) {
+      return res.status(500).send({ message: "User không tồn tại" });
+    }
+    console.log("first", user);
+    let chars =
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let string_length = 8;
+    let randomstring = "";
+    for (let i = 0; i < string_length; i++) {
+      let rnum = Math.floor(Math.random() * chars.length);
+      randomstring += chars.substring(rnum, rnum + 1);
+    }
+    console.log("randomstring", randomstring);
+    user.password = bcrypt.hashSync(randomstring, 8);
+    user.save((err) => {
+      if (err) {
+        res.send({
+          message: "Không thể lấy lại mật khẩu",
+          result: false,
+        });
+      }
+      res.send({
+        message: "Lấy lại mật khẩu thành công",
+        password: user.password,
+      });
+    });
+    console.log("user forgot", user);
+  });
+};
+
+exports.resetPassword = async (req, res) => {
+  let currentUser;
+  let { password, passwordOld } = req.body;
+
+  currentUser = await User.findOne({ _id: req.userId }).exec();
+
+  let passwordIsValid = bcrypt.compareSync(passwordOld, currentUser.password);
+
+  if (!passwordIsValid) {
+    return res.status(500).send({
+      result: false,
+      message: "Đổi mật khẩu thất bại!!",
+    });
+  }
+
+  currentUser.password = bcrypt.hashSync(password, 8);
+  currentUser.save((err) => {
+    if (err) {
+      return res.send({
+        message: err,
+      });
+    }
+    return res.send({
+      message: "Đổi mật khẩu thành công",
+    });
+  });
+};
+
 exports.refreshToken = async (req, res) => {
   const { refreshToken: requestToken } = req.body;
 
