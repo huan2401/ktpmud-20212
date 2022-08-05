@@ -1,22 +1,29 @@
 const express = require("express");
 const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
+const bodyParser = require("body-parser");
 
 const app = express();
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
+
 // middleware that does not modify the response body
-var doesNotModifyBody = function (request, response, next) {
-  next();
-};
+// var doesNotModifyBody = function (request, response, next) {
+//   next();
+// };
 
 // middleware that modify the response body
-var doesModifyBody = function (request, response, next) {
-  response.setHeader("Content-Type", "application/json");
-  next();
-};
+// var doesModifyBody = function (request, response, next) {
+//   response.setHeader("Content-Type", "application/json");
+//   next();
+// };
 
-app.use(doesNotModifyBody);
-app.use(doesModifyBody);
+// app.use(doesNotModifyBody);
+// app.use(doesModifyBody);
 
 // let corsOptions = {
 //   origin: "http://localhost:8081",
@@ -57,6 +64,7 @@ app.get("/", (req, res) => {
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/news.routes")(app);
+require("./app/routes/address.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

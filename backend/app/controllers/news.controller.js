@@ -1,10 +1,12 @@
 const News = require("../models/news.model");
+const db = require("../models");
+const { user: User, role: Role, refreshToken: RefreshToken } = db;
 
 exports.createNews = async (req, res) => {
   try {
+    currentUser = await User.findOne({ _id: req.userId }).exec();
     let news = new News();
     let {
-      name,
       title,
       description,
       price,
@@ -13,15 +15,11 @@ exports.createNews = async (req, res) => {
       bedroom,
       toilet,
       kitchenroom,
-      datetime_create,
-      date_now,
-      datetime_finish,
+      createAt,
+      updateAt,
       utilities,
-      img_infor,
       address,
-      userId,
     } = req.body;
-    news.name = name;
     news.title = title;
     news.description = description;
     news.price = price;
@@ -30,23 +28,21 @@ exports.createNews = async (req, res) => {
     news.bedroom = bedroom;
     news.toilet = toilet;
     news.kitchenroom = kitchenroom;
-    news.datetime_create = datetime_create;
-    news.date_now = date_now;
-    news.datetime_finish = datetime_finish;
-    // news.utilities = { ...utilities };
-    news.img_infor = img_infor;
-    // news.address = { ...address };
-    news.userId = userId;
+    news.createAt = createAt || Date.now();
+    news.updateAt = updateAt || Date.now();
+    // news.img_infor = img_infor;
+    news.img_infor = "test";
+    news.userId = currentUser._id;
     for (key in utilities) {
       news.utilities[`${key}`] = utilities[`${key}`];
     }
     for (key in address) {
       news.address[`${key}`] = address[`${key}`];
     }
-    console.log("news", news);
+
     await news.save((err) => {
       if (err) {
-        res.json({
+        return res.json({
           message: "Lỗi không thể đăng tin!! Vui lòng kiểm tra lại",
           result: false,
         });

@@ -26,4 +26,10 @@ module.exports = function (app) {
   app.post("/api/auth/reset", authJwt.verifyToken, controller.resetPassword);
 
   app.post("/api/auth/refreshtoken", controller.refreshToken);
+
+  app.get(
+    "/api/auth/signUpRenter",
+    authJwt.verifyToken,
+    controller.signUpRenter
+  );
 };

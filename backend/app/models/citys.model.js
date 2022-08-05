@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const City = mongoose.model(
+const Citys = mongoose.model(
   "City",
   new mongoose.Schema({
     code: {
@@ -18,4 +18,4 @@ const City = mongoose.model(
   })
 );
 
-module.exports = City;
+module.exports = Citys;

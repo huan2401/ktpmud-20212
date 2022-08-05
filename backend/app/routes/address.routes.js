@@ -1,6 +1,6 @@
 const { verifySignUp } = require("../middlewares");
 const { authJwt } = require("../middlewares");
-const controller = require("../controllers/news.controller");
+const controller = require("../controllers/address.controller");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -10,12 +10,7 @@ module.exports = function (app) {
     );
     next();
   });
-
-  // app.post("/api/news", authJwt.isRenter, controller.createNews);
-  app.post(
-    "/api/news",
-    authJwt.verifyToken,
-    authJwt.isRenter,
-    controller.createNews
-  );
+  app.get("/api/citys", controller.getAllCity);
+  app.get("/api/districts", controller.getAllDistricts);
+  app.get("/api/streets", controller.getAllStreets);
 };

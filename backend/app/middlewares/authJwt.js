@@ -32,7 +32,7 @@ const verifyToken = (req, res, next) => {
 };
 
 const isRenter = (req, res, next) => {
-  User.findById(req.body.userId).exec((err, user) => {
+  User.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;

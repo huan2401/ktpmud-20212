@@ -184,6 +184,22 @@ exports.resetPassword = async (req, res) => {
   });
 };
 
+exports.signUpRenter = async (req, res) => {
+  currentUser = await User.findOne({ _id: req.userId }).exec();
+  let roles = await Role.find();
+  roles.forEach((item) => {
+    if (!currentUser.roles.includes(item._id)) {
+      currentUser.roles.push(item._id);
+    }
+  });
+  currentUser.save((err) => {
+    if (err) {
+      return res.status(500).json({ message: err });
+    }
+    return res.status(200).json({ message: "Đăng ký đăng bài thành công" });
+  });
+};
+
 exports.refreshToken = async (req, res) => {
   const { refreshToken: requestToken } = req.body;
 

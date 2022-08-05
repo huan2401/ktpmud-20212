@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const News = mongoose.model(
   "News",
   new mongoose.Schema({
-    name: String,
+    // name: String,
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -17,15 +17,15 @@ const News = mongoose.model(
       type: String,
       required: true,
     },
+    // price: {
+    //   type: Number,
+    //   required: true,
+    // },
     price: {
-      type: Number,
+      type: String,
       required: true,
     },
     acreage: {
-      type: Number,
-      required: true,
-    },
-    typehome: {
       type: Number,
       required: true,
     },
@@ -41,17 +41,12 @@ const News = mongoose.model(
       type: Number,
       default: 1,
     },
-    datetime_create: {
-      type: String,
-      required: true,
-    },
-    date_now: {
+    createAt: {
       type: Date,
       default: Date.now(),
     },
-    datetime_finish: {
+    updateAt: {
       type: Date,
-      // required: true,
       default: Date.now(),
     },
     utilities: {
@@ -88,14 +83,6 @@ const News = mongoose.model(
         default: false,
       },
       isChecked_elevator: {
-        type: Boolean,
-        default: false,
-      },
-      isChecked_park: {
-        type: Boolean,
-        default: false,
-      },
-      isChecked_mattress: {
         type: Boolean,
         default: false,
       },
