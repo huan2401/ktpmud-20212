@@ -21,9 +21,19 @@ const News = mongoose.model(
     //   type: Number,
     //   required: true,
     // },
+    // price: {
+    //   type: String,
+    //   required: true,
+    // },
     price: {
-      type: String,
-      required: true,
+      time: {
+        type: String,
+        required: true,
+      },
+      value: {
+        type: Number,
+        required: true,
+      },
     },
     acreage: {
       type: Number,
@@ -34,12 +44,22 @@ const News = mongoose.model(
       default: 1,
     },
     toilet: {
-      type: Number,
-      default: 1,
+      required: true,
+      type: String,
     },
+    // kitchenroom: {
+    //   type: Number,
+    //   default: 1,
+    // },
     kitchenroom: {
-      type: Number,
-      default: 1,
+      type: {
+        type: String,
+        required: true,
+      },
+      value: {
+        type: Number,
+        default: 1,
+      },
     },
     createAt: {
       type: Date,
@@ -104,14 +124,14 @@ const News = mongoose.model(
         type: Number,
         required: true,
       },
-      Lat_ggmap: {
-        type: Number,
-        required: true,
-      },
-      Lng_ggmap: {
-        type: Number,
-        required: true,
-      },
+      // Lat_ggmap: {
+      //   type: Number,
+      //   required: true,
+      // },
+      // Lng_ggmap: {
+      //   type: Number,
+      //   required: true,
+      // },
       address_detail: {
         type: String,
         required: true,

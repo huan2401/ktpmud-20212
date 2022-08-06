@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Form,
@@ -12,12 +12,56 @@ import {
   Select,
 } from "antd";
 import { NewsWrapper } from "./CustomStyled";
+import { useDispatch } from "react-redux";
+import { createNews } from "slices/newsSlice";
+import axiosClient from "utils/axiosClient";
+import { useNavigate } from "react-router-dom";
+
+const initUtilitiesData = {};
 
 const NewsCreate = () => {
+  const [city, setCity] = useState([]);
+  const [citySelect, setCitySelect] = useState();
+  const [districtsSelect, setDistrictsSelect] = useState();
+  const [districts, setDistricts] = useState([]);
+  const [streets, setStreets] = useState([]);
+
+  useEffect(() => {
+    axiosClient.get("/citys").then((res) => setCity([...res.data.citys]));
+  }, []);
+
+  const handleChangeSelectCity = (e) => {
+    axiosClient
+      .get("/get-districts-by-city", {
+        params: {
+          id: e,
+        },
+      })
+      .then((res) => setDistricts([...res.data.districts]));
+    setCitySelect(e);
+  };
+
+  const handleChangeSelectDictrict = (e) => {
+    axiosClient
+      .get("/get-street-by-districts", {
+        params: {
+          id: e,
+        },
+      })
+      .then((res) => setStreets([...res.data.streets]));
+  };
+
   const { Option } = Select;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const onFinish = (values) => {
     console.log("Success:", values);
-    // dispatch(login(values));
+    dispatch(createNews(values)).then((res) => {
+      if (res.payload.result) {
+        return navigate(`/profileUser/${res.payload.userId}`);
+      }
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -126,7 +170,11 @@ const NewsCreate = () => {
               },
             ]}
           >
-            <Form.Item
+            <Radio.Group>
+              <Radio value={"chung"}>Chung</Radio>
+              <Radio value={"riêng"}>Riêng</Radio>
+            </Radio.Group>
+            {/* <Form.Item
               name={["toilet", "type"]}
               noStyle
               rules={[{ required: true, message: "toilet type is required" }]}
@@ -142,7 +190,7 @@ const NewsCreate = () => {
               rules={[{ required: true, message: "toilet is required" }]}
             >
               <Input style={{ width: "50%" }} type={"number"} />
-            </Form.Item>
+            </Form.Item> */}
           </Form.Item>
 
           <Form.Item
@@ -187,37 +235,48 @@ const NewsCreate = () => {
             ]}
           >
             <Form.Item
-              name={["address", "city"]}
+              name={["address", "code_city"]}
               noStyle
               rules={[{ required: true, message: "city type is required" }]}
             >
-              <Select placeholder={"Chọn thành phố"} style={{ width: "20%" }}>
-                <Option value="Hà Nội">Hà Nội</Option>
-                <Option value="Bắc Giang">Bắc Giang</Option>
+              <Select
+                placeholder={"Chọn thành phố"}
+                style={{ width: "20%" }}
+                onChange={handleChangeSelectCity}
+              >
+                {city.map((item) => {
+                  return <Option value={item.code}>{item.name}</Option>;
+                })}
               </Select>
             </Form.Item>
             <Form.Item
-              name={["address", "dictrict"]}
+              name={["address", "code_dictrict"]}
               noStyle
               rules={[{ required: true, message: "dictrict type is required" }]}
             >
-              <Select placeholder={"Chọn quận"} style={{ width: "20%" }}>
-                <Option value="Hoàng Mai">Hoàng Mai</Option>
-                <Option value="Hai Bà Trưng">Hai Bà Trưng</Option>
+              <Select
+                placeholder={"Chọn quận"}
+                style={{ width: "20%" }}
+                onChange={handleChangeSelectDictrict}
+              >
+                {districts.map((item) => {
+                  return <Option value={item.code}>{item.name}</Option>;
+                })}
               </Select>
             </Form.Item>
             <Form.Item
-              name={["address", "street"]}
+              name={["address", "code_street"]}
               noStyle
               rules={[{ required: true, message: "street type is required" }]}
             >
               <Select placeholder={"Chọn đường"} style={{ width: "20%" }}>
-                <Option value="Lê Thanh Nghị">Lê Thanh Nghị</Option>
-                <Option value="Trần Đại Nghĩa">Trần Đại Nghĩa</Option>
+                {streets.map((item) => {
+                  return <Option value={item.code}>{item.name}</Option>;
+                })}
               </Select>
             </Form.Item>
             <Form.Item
-              name={["address", "detail"]}
+              name={["address", "address_detail"]}
               noStyle
               rules={[
                 { required: true, message: "address detail is required" },
@@ -253,7 +312,7 @@ const NewsCreate = () => {
                 "AirConditional",
                 "elevator",
               ]}
-              style={{width: "50%"}}
+              style={{ width: "50%" }}
             />
           </Form.Item>
 

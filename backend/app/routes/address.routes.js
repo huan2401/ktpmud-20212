@@ -13,4 +13,7 @@ module.exports = function (app) {
   app.get("/api/citys", controller.getAllCity);
   app.get("/api/districts", controller.getAllDistricts);
   app.get("/api/streets", controller.getAllStreets);
+
+  app.get("/api/get-districts-by-city", controller.getDistrictsByCity);
+  app.get("/api/get-street-by-districts", controller.getStreetByDistricts);
 };

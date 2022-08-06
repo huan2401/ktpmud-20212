@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "slices/authSlice";
 import { Dropdown, Space, Menu, Modal, Form, Input, Button, Radio } from "antd";
 import { DownOutlined, SmileOutlined } from "@ant-design/icons";
+import { updateProfile } from "slices/authSlice";
 
 const Header = () => {
   const path = useLocation();
@@ -48,7 +49,13 @@ const Header = () => {
   };
 
   const onFinish = (values) => {
+    for (let key in values) {
+      if (!values[`${key}`]) {
+        values[`${key}`] = user[`${key}`];
+      }
+    }
     console.log("Success:", values);
+    dispatch(updateProfile(values));
     setIsModalResetPassVisible(false);
   };
 
@@ -112,7 +119,10 @@ const Header = () => {
               >
                 <a onClick={(e) => e.preventDefault()}>
                   <Space>
-                    <Link to={`/profileUser`} className="header-user">
+                    <Link
+                      to={`/profileUser/${user.id}`}
+                      className="header-user"
+                    >
                       {user.username}
                     </Link>
                     <DownOutlined />
@@ -150,7 +160,7 @@ const Header = () => {
                     name="username"
                     rules={[
                       {
-                        required: true,
+                        // required: true,
                         message: "Please input your username!",
                       },
                     ]}
@@ -162,7 +172,7 @@ const Header = () => {
                     name="firstname"
                     rules={[
                       {
-                        required: true,
+                        // required: true,
                         message: "Please input your firstname!",
                       },
                     ]}
@@ -174,7 +184,7 @@ const Header = () => {
                     name="lastname"
                     rules={[
                       {
-                        required: true,
+                        // required: true,
                         message: "Please input your lastname!",
                       },
                     ]}
@@ -183,9 +193,9 @@ const Header = () => {
                   </Form.Item>
 
                   <Form.Item name="gender" label="Gender">
-                    <Radio.Group>
-                      <Radio value="1">Male</Radio>
-                      <Radio value="0">Female</Radio>
+                    <Radio.Group defaultValue={user.gender}>
+                      <Radio value={1}>Male</Radio>
+                      <Radio value={0}>Female</Radio>
                     </Radio.Group>
                   </Form.Item>
 
@@ -198,7 +208,7 @@ const Header = () => {
                         message: "The input is not valid E-mail!",
                       },
                       {
-                        required: true,
+                        // required: true,
                         message: "Please input your E-mail!",
                       },
                     ]}
@@ -211,7 +221,7 @@ const Header = () => {
                     name="phone"
                     rules={[
                       {
-                        required: true,
+                        // required: true,
                         message: "Please input your phone!",
                       },
                     ]}
@@ -224,7 +234,7 @@ const Header = () => {
                     name="passwordOld"
                     rules={[
                       {
-                        required: true,
+                        // required: true,
                         message: "Please input your password!",
                       },
                     ]}
@@ -237,7 +247,7 @@ const Header = () => {
                     name="password"
                     rules={[
                       {
-                        required: true,
+                        // required: true,
                         message: "Please input your password!",
                       },
                     ]}

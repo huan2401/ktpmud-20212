@@ -21,3 +21,15 @@ exports.getAllStreets = async (req, res) => {
     streets: streets,
   });
 };
+exports.getDistrictsByCity = async (req, res) => {
+  let districts = await Districts.find({ parent_code: req.query.id });
+  res.json({
+    districts: districts,
+  });
+};
+exports.getStreetByDistricts = async (req, res) => {
+  let streets = await Streets.find({ parent_code: req.query.id });
+  res.json({
+    streets: streets,
+  });
+};

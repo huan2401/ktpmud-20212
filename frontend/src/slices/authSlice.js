@@ -61,6 +61,41 @@ export const login = createAsyncThunk(
   }
 );
 
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (
+    {
+      username,
+      firstname,
+      lastname,
+      email,
+      gender,
+      phone,
+      password,
+      passwordOld,
+    },
+    thunkAPI
+  ) => {
+    try {
+      const data = await AuthService.updateProfile(
+        username,
+        firstname,
+        lastname,
+        email,
+        gender,
+        phone,
+        password,
+        passwordOld
+      );
+      console.log("data updateProfile", data);
+      return { user: data };
+    } catch (error) {
+      console.log("erorr login", error);
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
 const initialState = user
   ? { login: true, user }
   : { login: false, user: null };
@@ -108,6 +143,13 @@ const authSlice = createSlice({
       state.login = false;
       state.user = null;
     },
+    [updateProfile.fulfilled]: (state, action) => {
+      console.log("action.payload.user.data",action.payload.user.data)
+      state.user = action.payload.user.data.data;
+    },
+    // [updateProfile.rejected]: (state, action) => {
+    //   state.user = null;
+    // },
     // [logout.fulfilled]: (state, action) => {
     //   state.login = false;
     //   state.user = null;

@@ -4,7 +4,13 @@ import "./App.less";
 import { useSelector, useDispatch } from "react-redux";
 import { checkLogin } from "slices/authSlice";
 import AuthLayout from "components/Layout/AuthLayout/AuthLayout";
-import { Routes, Route, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  Redirect,
+  useNavigate,
+} from "react-router-dom";
 import Home from "containers/Home/Home";
 import Login from "containers/Login/Login";
 import Signup from "containers/Signup/Signup";
@@ -19,11 +25,15 @@ import ProfileUser from "containers/ProfileUser/ProfileUser";
 
 function App() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isLogin = useSelector((state) => state.auth.login);
   console.log("isLogin", isLogin);
   useEffect(() => {
     if (localStorage.getItem("token")) {
       dispatch(checkLogin(true));
+    }
+    if (!isLogin) {
+      navigate("/login");
     }
   }, [isLogin]);
   return (

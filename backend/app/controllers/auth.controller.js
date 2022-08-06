@@ -200,6 +200,53 @@ exports.signUpRenter = async (req, res) => {
   });
 };
 
+exports.updateProfile = async (req, res) => {
+  const currentUser = await User.findOne({ _id: req.userId }).exec();
+  console.log("currentUser", currentUser);
+
+  const profileUser = {
+    username: req.body.username,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    gender: req.body.gender,
+    phone: req.body.phone,
+  };
+
+  for (key in profileUser) {
+    if (!!profileUser[`${key}`]) {
+      currentUser[`${key}`] = profileUser[`${key}`];
+    }
+  }
+
+  let { password, passwordOld } = req.body;
+  let passwordIsValid;
+  if (!!password && !!passwordOld) {
+    passwordIsValid = bcrypt.compareSync(passwordOld, currentUser.password);
+
+    if (!passwordIsValid) {
+      return res.status(500).send({
+        result: false,
+        message: "Đổi mật khẩu thất bại!!",
+      });
+    }
+
+    currentUser.password = bcrypt.hashSync(password, 8);
+  }
+
+  currentUser.save((err) => {
+    if (err) {
+      return res.send({
+        message: err,
+      });
+    }
+    return res.send({
+      message: "Chỉnh sửa thông tin thành công",
+      data: currentUser,
+    });
+  });
+};
+
 exports.refreshToken = async (req, res) => {
   const { refreshToken: requestToken } = req.body;
 

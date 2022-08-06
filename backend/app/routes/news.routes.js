@@ -18,4 +18,8 @@ module.exports = function (app) {
     authJwt.isRenter,
     controller.createNews
   );
+
+  app.get("/api/news", controller.getAllNews);
+
+  app.get("/api/news-by-user", authJwt.verifyToken, controller.getNewsByUser);
 };

@@ -31,9 +31,42 @@ const login = (username, password) => {
   });
 };
 
+const updateProfile = (
+  username,
+  firstname,
+  lastname,
+  email,
+  gender,
+  phone,
+  password,
+  passwordOld
+) => {
+  if (!!password && !!passwordOld) {
+    return axiosClient.post("/auth/updateProfile", {
+      username,
+      firstname,
+      lastname,
+      email,
+      gender,
+      phone,
+      password,
+      passwordOld,
+    });
+  }
+  return axiosClient.post("/auth/updateProfile", {
+    username,
+    firstname,
+    lastname,
+    email,
+    gender,
+    phone,
+  });
+};
+
 const authService = {
   register,
   login,
+  updateProfile,
 };
 
 export default authService;
