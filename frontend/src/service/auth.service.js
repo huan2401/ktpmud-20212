@@ -6,7 +6,7 @@ const register = (
   lastname,
   email,
   gender,
-  avatar,
+  // avatar,
   phone,
   password,
   roles
@@ -17,7 +17,7 @@ const register = (
     lastname,
     email,
     gender,
-    avatar,
+    // avatar,
     phone,
     password,
     roles,

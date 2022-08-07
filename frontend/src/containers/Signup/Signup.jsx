@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { SignUpWrapper } from "./CustomStyle";
-import { login } from "slices/authSlice";
+import { register } from "slices/authSlice";
 
 const getBase64 = (img, callback) => {
   const reader = new FileReader();
@@ -41,6 +41,7 @@ const beforeUpload = (file) => {
 function SignUp() {
   // const [avatar, setAvatar] = useState();
   const [loading, setLoading] = useState(false);
+  const [checkedSignUp, setCheckedSignUp] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const navigate = useNavigate();
 
@@ -61,8 +62,21 @@ function SignUp() {
 
   const onFinish = (values) => {
     console.log("Success:", values);
-    dispatch(login(values));
+    dispatch(register(values)).then((res) => {
+      if (res.payload.message === "User was registered successfully!") {
+        setCheckedSignUp(true);
+      }
+    });
   };
+
+  useEffect(() => {
+    if (checkedSignUp) {
+      navigate("/login");
+      return;
+    }
+  }, [checkedSignUp]);
+
+  console.log("checkedSignUp", checkedSignUp);
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -149,8 +163,8 @@ function SignUp() {
 
         <Form.Item name="gender" label="Gender">
           <Radio.Group>
-            <Radio value="male">Male</Radio>
-            <Radio value="female">Female</Radio>
+            <Radio value={1}>Male</Radio>
+            <Radio value={0}>Female</Radio>
           </Radio.Group>
         </Form.Item>
 

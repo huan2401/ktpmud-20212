@@ -5,18 +5,19 @@ const { user: User, role: Role, refreshToken: RefreshToken } = db;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
   const user = new User({
     username: req.body.username,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
     gender: req.body.gender,
-    avatar: req.body.avatar,
+    // avatar: req.body.avatar,
+    avatar: "",
     phone: req.body.phone,
     password: bcrypt.hashSync(req.body.password, 8),
   });
-  user.save((err, user) => {
+  await user.save((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
