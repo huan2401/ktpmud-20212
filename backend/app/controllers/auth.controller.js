@@ -106,7 +106,7 @@ exports.signin = (req, res) => {
         authorities.push(user.roles[i].name);
       }
       res.status(200).send({
-        id: user._id,
+        _id: user._id,
         username: user.username,
         email: user.email,
         firstname: user.firstname,

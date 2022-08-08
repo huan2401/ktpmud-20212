@@ -15,7 +15,7 @@ const Home = () => {
   const [news, setNews] = useState([]);
   let arrCreateAt = [];
   useEffect(() => {
-    axiosClient.get("/news").then((res) => {
+    axiosClient.get("/get-all-news").then((res) => {
       console.log("res create", res.data.news);
       res.data.news.forEach((item) => arrCreateAt.push(item.createAt));
       console.log("arr", arrCreateAt);

@@ -125,7 +125,7 @@ const Header = () => {
                 <a onClick={(e) => e.preventDefault()}>
                   <Space>
                     <Link
-                      to={`/profileUser/${user.id}`}
+                      to={`/profileUser/${user._id}`}
                       className="header-user"
                     >
                       {user.username}

@@ -19,7 +19,7 @@ module.exports = function (app) {
     controller.createNews
   );
 
-  app.get("/api/news", controller.getAllNews);
+  app.get("/api/get-all-news", controller.getAllNews);
 
   app.get("/api/news-by-user", controller.getNewsByUser);
 
