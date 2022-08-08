@@ -16,10 +16,13 @@ import { useDispatch } from "react-redux";
 import { createNews } from "slices/newsSlice";
 import axiosClient from "utils/axiosClient";
 import { useNavigate } from "react-router-dom";
-
-const initUtilitiesData = {};
+import { useSelector } from "react-redux";
 
 const NewsCreate = () => {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [city, setCity] = useState([]);
   const [citySelect, setCitySelect] = useState();
   const [districtsSelect, setDistrictsSelect] = useState();
@@ -29,6 +32,12 @@ const NewsCreate = () => {
   useEffect(() => {
     axiosClient.get("/citys").then((res) => setCity([...res.data.citys]));
   }, []);
+
+  useEffect(() => {
+    if (user && user.roles.length <= 1) {
+      return navigate("/");
+    }
+  }, [user, user.roles, user.roles.length]);
 
   const handleChangeSelectCity = (e) => {
     axiosClient
@@ -52,8 +61,6 @@ const NewsCreate = () => {
   };
 
   const { Option } = Select;
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const onFinish = (values) => {
     console.log("Success:", values);

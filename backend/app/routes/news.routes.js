@@ -21,5 +21,9 @@ module.exports = function (app) {
 
   app.get("/api/news", controller.getAllNews);
 
-  app.get("/api/news-by-user", authJwt.verifyToken, controller.getNewsByUser);
+  app.get("/api/news-by-user", controller.getNewsByUser);
+
+  app.get("/api/news-by-id", controller.getNewsById);
+
+  app.get("/api/user-from-news", controller.getUserFromNews);
 };

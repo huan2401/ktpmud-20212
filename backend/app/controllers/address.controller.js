@@ -33,3 +33,21 @@ exports.getStreetByDistricts = async (req, res) => {
     streets: streets,
   });
 };
+exports.getCityByCode = async (req, res) => {
+  let cityByCode = await Citys.findOne({ code: req.query.id });
+  res.json({
+    cityByCode: cityByCode,
+  });
+};
+exports.getDistrictByCode = async (req, res) => {
+  let districtByCode = await Districts.findOne({ code: req.query.id });
+  res.json({
+    districtByCode: districtByCode,
+  });
+};
+exports.getStreetByCode = async (req, res) => {
+  let streetByCode = await Streets.findOne({ code: req.query.id });
+  res.json({
+    streetByCode: streetByCode,
+  });
+};

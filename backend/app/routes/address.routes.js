@@ -16,4 +16,8 @@ module.exports = function (app) {
 
   app.get("/api/get-districts-by-city", controller.getDistrictsByCity);
   app.get("/api/get-street-by-districts", controller.getStreetByDistricts);
+
+  app.get("/api/get-city-by-code", controller.getCityByCode);
+  app.get("/api/get-district-by-code", controller.getDistrictByCode);
+  app.get("/api/get-street-by-code", controller.getStreetByCode);
 };

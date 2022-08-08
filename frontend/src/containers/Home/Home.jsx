@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel } from "antd";
 import { HomeWrapper } from "./CustomStyled";
 import Post from "components/common/Post/Post";
+import axiosClient from "utils/axiosClient";
 
 const contentStyle = {
   height: "600px",
@@ -11,6 +12,18 @@ const contentStyle = {
 };
 
 const Home = () => {
+  const [news, setNews] = useState([]);
+  let arrCreateAt = [];
+  useEffect(() => {
+    axiosClient.get("/news").then((res) => {
+      console.log("res create", res.data.news);
+      res.data.news.forEach((item) => arrCreateAt.push(item.createAt));
+      console.log("arr", arrCreateAt);
+      console.log("arr", arrCreateAt.sort());
+      setNews(res.data.news);
+    });
+  }, []);
+  console.log("get all news", news);
   return (
     <HomeWrapper>
       <div className="home-banner">
@@ -50,9 +63,12 @@ const Home = () => {
           <p>Tin đăng gần đây</p>
         </div>
         <div className="home-news-content">
-          <Post />
-          <Post />
-          <Post />
+          {news.map((item, index) => {
+            if (index >= 3) {
+              return;
+            }
+            return <Post data={item} />;
+          })}
         </div>
       </div>
       <div className="home-map">

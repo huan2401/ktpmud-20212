@@ -4,10 +4,11 @@ import { useSelector } from "react-redux";
 import { HeaderWrapper } from "./CustomStyled";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { logout } from "slices/authSlice";
+import { logout, signUpRenter } from "slices/authSlice";
 import { Dropdown, Space, Menu, Modal, Form, Input, Button, Radio } from "antd";
 import { DownOutlined, SmileOutlined } from "@ant-design/icons";
 import { updateProfile } from "slices/authSlice";
+import axiosClient from "utils/axiosClient";
 
 const Header = () => {
   const path = useLocation();
@@ -36,6 +37,10 @@ const Header = () => {
 
   const handleOk = () => {
     console.log("ok");
+    dispatch(signUpRenter());
+    // axiosClient
+    //   .get("/auth/signUpRenter")
+    //   .then((res) => console.log("res", res));
     setIsModalSignUpRenter(false);
   };
 
@@ -129,7 +134,10 @@ const Header = () => {
                   </Space>
                 </a>
               </Dropdown>
-              <Link to="/news">Đăng tin mới</Link>
+              {user && user.roles.length === 2 && (
+                <Link to="/news">Đăng tin mới</Link>
+              )}
+
               <Link to={"/login"} onClick={() => dispatch(logout())}>
                 Đăng xuất
               </Link>

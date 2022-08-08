@@ -44,8 +44,8 @@ export const login = createAsyncThunk(
   "auth/login",
   async ({ username, password }, thunkAPI) => {
     try {
-      console.log("username pass", username, password);
       const data = await AuthService.login(username, password);
+      console.log("username pass", data);
       return { user: data };
     } catch (error) {
       // const message =
@@ -87,6 +87,20 @@ export const updateProfile = createAsyncThunk(
         password,
         passwordOld
       );
+      console.log("data updateProfile", data);
+      return { user: data };
+    } catch (error) {
+      console.log("erorr login", error);
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const signUpRenter = createAsyncThunk(
+  "auth/signUpRenter",
+  async (_, thunkAPI) => {
+    try {
+      const data = await AuthService.signUpRenter();
       console.log("data updateProfile", data);
       return { user: data };
     } catch (error) {
@@ -144,8 +158,12 @@ const authSlice = createSlice({
       state.user = null;
     },
     [updateProfile.fulfilled]: (state, action) => {
-      console.log("action.payload.user.data",action.payload.user.data)
+      console.log("action.payload.user.data", action.payload.user.data);
       state.user = action.payload.user.data.data;
+    },
+    [signUpRenter.fulfilled]: (state, action) => {
+      console.log("action.payload.user.data", action.payload.user.data);
+      state.user = action.payload.user.data.user;
     },
     // [updateProfile.rejected]: (state, action) => {
     //   state.user = null;

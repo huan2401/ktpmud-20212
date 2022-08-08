@@ -63,10 +63,15 @@ const updateProfile = (
   });
 };
 
+const signUpRenter = () => {
+  return axiosClient.get("/auth/signUpRenter");
+};
+
 const authService = {
   register,
   login,
   updateProfile,
+  signUpRenter
 };
 
 export default authService;

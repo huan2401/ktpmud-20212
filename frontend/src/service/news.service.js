@@ -6,6 +6,10 @@ const createNews = (data) => {
   });
 };
 
+const getNewsByUser = () => {
+  return axiosClient.get("/news-by-user");
+};
+
 const newsService = {
   createNews,
 };

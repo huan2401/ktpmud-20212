@@ -72,6 +72,7 @@ exports.signin = (req, res) => {
   })
     .populate("roles", "-__v")
     .exec(async (err, user) => {
+      console.log("user",user)
       if (err) {
         res.status(500).send({ message: err });
         return;
@@ -97,7 +98,6 @@ exports.signin = (req, res) => {
         expiresIn: config.jwtExpiration,
       });
 
-      // let refreshToken = await RefreshToken.createToken(user);
 
       let authorities = [];
 
@@ -116,7 +116,6 @@ exports.signin = (req, res) => {
         phone: user.phone,
         roles: authorities,
         accessToken: token,
-        // refreshToken: refreshToken,
       });
     });
 };
@@ -197,7 +196,9 @@ exports.signUpRenter = async (req, res) => {
     if (err) {
       return res.status(500).json({ message: err });
     }
-    return res.status(200).json({ message: "Đăng ký đăng bài thành công" });
+    return res
+      .status(200)
+      .json({ message: "Đăng ký đăng bài thành công", user: currentUser });
   });
 };
 
@@ -245,6 +246,13 @@ exports.updateProfile = async (req, res) => {
       message: "Chỉnh sửa thông tin thành công",
       data: currentUser,
     });
+  });
+};
+
+exports.getUserById = async (req, res) => {
+  let userById = await User.findOne({ _id: req.query.id }).exec();
+  res.json({
+    userById: userById,
   });
 };
 

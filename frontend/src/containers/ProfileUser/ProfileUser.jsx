@@ -1,13 +1,26 @@
 import { Avatar, Breadcrumb } from "antd";
 import Post from "components/common/Post/Post";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import { ProfileUserWrapper } from "./CustomStyled";
+import axiosClient from "utils/axiosClient";
 
 const ProfileUser = () => {
   const user = useSelector((state) => state.auth.user);
+  const [newsByUser, setNewsByUser] = useState([]);
+  const id = useParams();
+  useEffect(() => {
+    axiosClient
+      .get("/news-by-user", {
+        params: {
+          id: id.id,
+        },
+      })
+      .then((res) => setNewsByUser([...res.data.newsByUser]));
+  }, []);
+  console.log("newsByUser", newsByUser);
   return (
     <ProfileUserWrapper>
       <div>
@@ -46,13 +59,9 @@ const ProfileUser = () => {
       <div className="profile-news">
         <p>Tin đăng của {user.username}</p>
         <div>
-          <Post size={300} />
-          <Post size={300} />
-          <Post size={300} />
-          <Post size={300} />
-          <Post size={300} />
-          <Post size={300} />
-          <Post size={300} />
+          {newsByUser.map((item) => {
+            return <Post size={300} data={item} />;
+          })}
         </div>
       </div>
     </ProfileUserWrapper>

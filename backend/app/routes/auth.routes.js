@@ -34,4 +34,7 @@ module.exports = function (app) {
     authJwt.verifyToken,
     controller.signUpRenter
   );
+
+  app.get("/api/user-by-id", controller.getUserById);
+
 };
